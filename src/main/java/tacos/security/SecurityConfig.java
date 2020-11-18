@@ -27,6 +27,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 			.httpBasic();
 	}
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth
+			.ldapAuthentication()
+			.userSearchBase("ou=people")
+			.userSearchFilter("(uid={0})")
+			.groupSearchBase("ou=groups")
+			.groupSearchFilter("member={0}")
+			.contextSource()
+			.root("dc=tacocloud,dc=com")
+			.ldif("classpath:users.ldif")
+			.and()
+			.passwordCompare()
+			.passwordEncoder(new BCryptPasswordEncoder())
+			.passwordAttribute("userPasscode");
+			
+	}
+	
+	//JDBC 기반 사용자스토어
+	/*
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth
@@ -39,4 +60,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.passwordEncoder(new NoEncodingPasswordEncoder());
 		
 	}
+	*/
 }
