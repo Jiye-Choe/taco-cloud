@@ -34,12 +34,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-			.antMatchers("/design", "/orders")	//제한요소가 먼저
-			.hasRole("ROLE_USER")
-			.antMatchers("/","/**").permitAll()	//모두 허용은 나중에
+				.antMatchers("/design", "/orders")	//제한요소가 먼저
+					.access("hasRole('ROLE_USER')")
+				.antMatchers("/","/**").access("permitAll")	//모두 허용은 나중에
+					
 			.and()	//인증 구성이 끝났다. 새로운 구성을 시작한다는 뜻
-			.formLogin()
-			.loginPage("/login");	//커스텀 로그인 페이지 경로
+				.formLogin()
+					.loginPage("/login")	//커스텀 로그인 페이지 경로
+					
+			.and()
+				.logout()
+					.logoutSuccessUrl("/")
+					
+			.and()
+				.csrf();
 	}
 	
 	
