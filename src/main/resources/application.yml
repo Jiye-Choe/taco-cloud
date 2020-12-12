@@ -1,0 +1,16 @@
+taco:
+  orders:
+    pageSize: 10
+    
+logging:
+  level:
+    tacos: debug
+    
+---
+spring:
+  profiles:
+    active:
+    - prod
+  
+logging:
+  level:    tacos: WARN
